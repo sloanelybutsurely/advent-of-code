@@ -3,22 +3,14 @@
 import Data.List
 import Data.Maybe
 
-main :: IO ()
-main =
-  do
-    input <- getInput
+main = interact findSolution
 
-    let answer = uncurry (*) $ fromJust $ find isSolutionPair $ pairs input
+findSolution = show . product . findJust isSolutionPair . pairs . parseInput
 
-    putStrLn $ show answer
+parseInput = map read . lines
 
-getInput :: IO [Int]
-getInput = fmap (map read . lines) getContents
+pairs = sequence . replicate 2
 
-pairs :: [a] -> [(a, a)]
-pairs [] = []
-pairs [_] = []
-pairs (x:xs) = [(x, y) | y <- xs] ++ pairs xs
+isSolutionPair = (2020 ==) . sum
 
-isSolutionPair :: (Int, Int) -> Bool
-isSolutionPair (a, b) = a + b == 2020
+findJust f = fromJust . find f
