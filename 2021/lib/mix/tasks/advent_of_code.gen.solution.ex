@@ -33,6 +33,7 @@ defmodule Mix.Tasks.AdventOfCode.Gen.Solution do
         create_file(day_file, day_contents)
 
         for part <- 1..2 do
+          part = to_string(part)
           part_module = part_module(day, part)
 
           part_contents =
