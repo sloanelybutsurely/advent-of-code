@@ -25,21 +25,12 @@ solve = show . length . filter (isValidPasswordEntry . readPasswordEntry) . line
 readPasswordEntry :: String -> PasswordEntry
 readPasswordEntry = read
 
-(!!?) :: [a] -> Int -> Maybe a
-[] !!? _ = Nothing
-(x:xs) !!? 0 = Just x
-(_:xs) !!? idx = xs !!? (idx - 1)
-
-maybeToBool (Just a) = a
-maybeToBool Nothing = False
-
 xor :: Bool -> Bool -> Bool
 xor l r = l /= r
 
 isValidPasswordEntry (PasswordEntry pos1 pos2 char pass) =
-    (maybeToBool $ fmap (==char) char1) `xor`
-    (maybeToBool $ fmap (==char) char2)
+    (charAtPos1 == char) `xor` (charAtPos2 == char)
   where
-    char1 = pass !!? (pos1 - 1)
-    char2 = pass !!? (pos2 - 1)
+    charAtPos1 = pass !! (pos1 - 1)
+    charAtPos2 = pass !! (pos2 - 1)
 
