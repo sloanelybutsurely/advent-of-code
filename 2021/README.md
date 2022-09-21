@@ -14,7 +14,7 @@
 
 |  S  |  M  |  T  |  W  |  T  |  F  |  S  |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
-|     |     |     |  1  |  2  |  3  |  4  |
+|     |     |     | [1] |  2  |  3  |  4  |
 |  5  |  6  |  7  |  8  |  9  | 10  | 11  |
 | 12  | 13  | 14  | 15  | 16  | 17  | 18  |
 | 19  | 20  | 21  | 22  | 23  | 24  | 25  |
@@ -38,3 +38,5 @@ A behaviour for a solution to a puzzle. Must define a `solve/2` callback.
 Case template defining an `assert_solution/2` helper.
 
 <!-- links -->
+
+[1]: ./lib/advent_of_code/day01.ex
