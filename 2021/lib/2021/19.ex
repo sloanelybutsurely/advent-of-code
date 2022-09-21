@@ -2,13 +2,28 @@ import AOC
 
 aoc 2021, 19 do
   def p1 do
-    scanners = input()
+    scans = input()
 
-    align_scanners(scanners)
-    |> MapSet.size()
+    {aligned, _} = align_scans(scans)
+    IO.puts("")
+
+    MapSet.size(aligned)
   end
 
   def p2 do
+    scans = input()
+
+    {_, origins} = align_scans(scans)
+    IO.puts("")
+
+    for a <- origins, b <- origins -- [a] do
+      manhattan_distance(a, b)
+    end
+    |> Enum.max()
+  end
+
+  def manhattan_distance({x0, y0, z0}, {x1, y1, z1}) do
+    abs(x0 - x1) + abs(y0 - y1) + abs(z0 - z1)
   end
 
   def attempt_alignment(source, canidate) do
@@ -16,10 +31,9 @@ aoc 2021, 19 do
       source
       |> potential_transforms(canidate)
       |> Enum.map(fn transform ->
-        apply_transform(canidate, transform)
+        {apply_transform(canidate, transform), transform.({0, 0, 0})}
       end)
-      |> Enum.find(:miss, fn transformed ->
-
+      |> Enum.find(:miss, fn {transformed, _} ->
         overlap(source, transformed) >= 12
       end)
 
@@ -33,24 +47,24 @@ aoc 2021, 19 do
 
   def union(map_sets), do: Enum.reduce(map_sets, MapSet.new(), &MapSet.union/2)
 
-  def align_scanners([start | rest]) do
-    align_scanners(rest, start)
+  def align_scans([start | rest]) do
+    align_scans(rest, start, [{0, 0, 0}])
   end
 
-  def align_scanners(scanners, aligned, skipped \\ [])
-  def align_scanners([], aligned, []), do: aligned
-  def align_scanners([], aligned, skipped) do
+  def align_scans(scans, aligned, origins, skipped \\ [])
+  def align_scans([], aligned, origins, []), do: {aligned, origins}
+  def align_scans([], aligned, origins, skipped) do
     IO.puts("")
-    align_scanners([aligned | skipped])
+    align_scans(skipped, aligned, origins, [])
   end
-  def align_scanners([canidate | rest], aligned, skipped) do
+  def align_scans([canidate | rest], aligned, origins, skipped) do
     case aligned |> attempt_alignment(canidate) do
       :miss -> 
         IO.write(".")
-        align_scanners(rest, aligned, [canidate | skipped])
-      {:ok, transformed} ->
+        align_scans(rest, aligned, origins, [canidate | skipped])
+      {:ok, {transformed, origin}} ->
         IO.write("+")
-        align_scanners(rest, MapSet.union(transformed, aligned), skipped)
+        align_scans(rest, MapSet.union(transformed, aligned), [origin | origins], skipped)
     end
   end
 
