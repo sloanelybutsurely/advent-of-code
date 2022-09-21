@@ -24,3 +24,5 @@ advent_of_code_2015-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+/input/
