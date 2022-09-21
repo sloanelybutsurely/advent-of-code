@@ -10,6 +10,15 @@ aoc 2021, 18 do
   end
 
   def p2 do
+    numbers = input() |> Enum.to_list()
+
+    for a <- numbers, b <- numbers, a != b do
+      concat(a, b)
+      |> reduce()
+      |> to_lists()
+      |> magnitude()
+    end
+    |> Enum.max()
   end
 
   def magnitude([a, b]) do
