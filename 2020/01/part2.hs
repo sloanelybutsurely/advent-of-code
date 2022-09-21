@@ -3,22 +3,14 @@
 import Data.List
 import Data.Maybe
 
-main :: IO ()
-main =
-  do
-    input <- getInput
+main = interact findSolution
 
-    let answer = product $ fromJust $ find isSolutionTriple $ triples input
+findSolution = show . product . findJust isSolutionTriple . triples . parseInput
 
-    putStrLn $ show answer
+parseInput = map read . lines 
 
-getInput :: IO [Int]
-getInput = fmap (map read . lines) getContents
+triples = sequence . replicate 3
 
-triples :: [a] -> [[a]]
-triples xs = sequence $ replicate 3 xs
+isSolutionTriple = (2020 ==) . sum
 
-isSolutionTriple :: [Int] -> Bool
-isSolutionTriple triple = sum triple == 2020
-
-multplyTriple (a, b, c) = a * b * c
+findJust f = fromJust . find f
