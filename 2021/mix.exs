@@ -32,6 +32,7 @@ defmodule AdventOfCode.MixProject do
       {:nimble_parsec, "~> 1.0"},
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
       {:rexbug, ">= 1.0.0"},
+      {:rstar, github: "armon/erl-rstar"},
       {:timex, "~> 3.7.6"}
     ]
   end
