@@ -9,10 +9,19 @@ defmodule Mix.Tasks.AdventOfCode.FetchInput do
   @moduledoc """
   #{@shortdoc}.
 
+  Expects `:event` and `:session` keys to be configured for the `:advent_of_code` application.
+  These values can be overridden.
+
   ## Examples
 
       # Fetch day 1's inputs
       $ mix advent_of_code.fetch_input 1
+
+      # Fetch Day 1 of 2020
+      $ mix advent_of_code.fetch_input --event 2020 1
+
+      # Pass your session cookie value
+      $ mix advent_of_code.fetch_input 13 --session foobar
   """
 
   @finch Mix.AdventOfCode.FetchInput.Finch
