@@ -96,34 +96,27 @@ aoc 2015, 7 do
   def circuit(), do: input_stream() |> Stream.map(&parse_instruction/1) |> Enum.into(%{})
 
   def p1 do
-    :ets.new(:memo, [:set, :named_table])
-
     circuit()
     |> trace("a")
+    |> then(&elem(&1, 1))
   end
 
   def p2 do
-    :ets.new(:memo, [:set, :named_table])
+    a = p1()
 
     circuit()
-    |> Map.put("b", 956)
+    |> Map.put("b", a)
     |> trace("a")
+    |> then(&elem(&1, 1))
   end
 
   def trace(circuit, wire) when is_binary(wire) do
-    case :ets.lookup(:memo, wire) do
-      [{^wire, value}] ->
-        value
-
-      _ ->
-        value = trace(circuit, Map.get(circuit, wire))
-        :ets.insert(:memo, {wire, value})
-        value
-    end
+    {circuit, traced} = trace(circuit, Map.get(circuit, wire))
+    {Map.put(circuit, wire, traced), traced}
   end
 
-  def trace(_circuit, signal) when is_integer(signal) do
-    signal
+  def trace(circuit, signal) when is_integer(signal) do
+    {circuit, signal}
   end
 
   def trace(circuit, {:wire, wire}) do
@@ -135,24 +128,35 @@ aoc 2015, 7 do
   end
 
   def trace(circuit, {:or, lhs, rhs}) do
-    trace(circuit, lhs) ||| trace(circuit, rhs)
+    {circuit, lhs} = trace(circuit, lhs)
+    {circuit, rhs} = trace(circuit, rhs)
+
+    {circuit, lhs ||| rhs}
   end
 
   def trace(circuit, {:and, lhs, rhs}) do
-    trace(circuit, lhs) &&& trace(circuit, rhs)
+    {circuit, lhs} = trace(circuit, lhs)
+    {circuit, rhs} = trace(circuit, rhs)
+
+    {circuit, lhs &&& rhs}
   end
 
   def trace(circuit, {:lshift, lhs, rhs}) do
-    trace(circuit, lhs) <<< trace(circuit, rhs)
+    {circuit, lhs} = trace(circuit, lhs)
+    {circuit, rhs} = trace(circuit, rhs)
+
+    {circuit, lhs <<< rhs}
   end
 
   def trace(circuit, {:rshift, lhs, rhs}) do
-    trace(circuit, lhs) >>> trace(circuit, rhs)
+    {circuit, lhs} = trace(circuit, lhs)
+    {circuit, rhs} = trace(circuit, rhs)
+
+    {circuit, lhs >>> rhs}
   end
 
   def trace(circuit, {:not, arg}) do
-    ~~~trace(circuit, arg)
+    {circuit, arg} = trace(circuit, arg)
+    {circuit, ~~~arg}
   end
-
-  def trace(_circuit, other), do: other
 end
