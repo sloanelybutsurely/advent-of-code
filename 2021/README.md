@@ -36,3 +36,5 @@ A behaviour for a solution to a puzzle. Must define a `solve/2` callback.
 ## [`AdventOfCode.PuzzleCase`](./test/support/puzzle_case.ex)
 
 Case template defining an `assert_solution/2` helper.
+
+<!-- links -->

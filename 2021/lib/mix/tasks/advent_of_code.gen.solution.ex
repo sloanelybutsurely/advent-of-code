@@ -48,6 +48,16 @@ defmodule Mix.Tasks.AdventOfCode.Gen.Solution do
           create_file(part_test_file, part_test_contents)
         end
 
+        day_regex = ~r/\W(#{day})\W/
+        readme_file = "README.md"
+        readme_contents = File.read!("README.md")
+
+        readme_contents =
+          "#{String.replace(readme_contents, day_regex, "[\\1]")}\n[#{day}]: ./#{day_file}\n"
+
+        File.write!(readme_file, readme_contents)
+        Mix.shell().info([:green, "* updating ", :reset, "README.md"])
+
       _ ->
         Mix.raise("Unknown arguments.")
     end
@@ -58,8 +68,6 @@ defmodule Mix.Tasks.AdventOfCode.Gen.Solution do
       @moduledoc """
       Day <%= @day %>
       """
-
-
     end
 
     defmodule <%= inspect(@mod) %>.Part1 do
