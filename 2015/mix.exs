@@ -23,6 +23,7 @@ defmodule AdventOfCode2015.MixProject do
     [
       {:advent_of_code_utils, "~> 1.0"},
       {:exla, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "exla"},
+      {:libgraph, "~> 0.13.3"},
       {:nimble_parsec, "~> 1.0"},
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true}
     ]
