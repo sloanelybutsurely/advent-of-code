@@ -20,15 +20,6 @@ aoc 2021, 14 do
     {sequence, insertion_mappings}
   end
 
-  def perform_insertions(<<a::binary-size(1), b::binary-size(1), rest::binary>>, mappings) do
-    case Map.fetch(mappings, a <> b) do
-      {:ok, c} -> a <> c <> perform_insertions(b <> rest, mappings)
-      _ -> a <> perform_insertions(b <> rest, mappings)
-    end
-  end
-
-  def perform_insertions(base, _), do: base
-
   def perform_insertions_lossy(sequence, mappings) when is_binary(sequence),
     do:
       sequence
@@ -37,10 +28,10 @@ aoc 2021, 14 do
 
   def perform_insertions_lossy({letter_freqs, pair_freqs}, mappings) do
     [pair_ops, letter_ops] =
-      for {from, to} <- mappings, Map.has_key?(pair_freqs, from) do
+      for {from, to} <- mappings,
+          <<front::binary-size(1), back::binary-size(1)>> = from,
+          Map.has_key?(pair_freqs, from) do
         existing_pairs = Map.get(pair_freqs, from, 0)
-        # Additional letters
-        <<front::binary-size(1), back::binary-size(1)>> = from
 
         {[{from, -existing_pairs}, {front <> to, existing_pairs}, {to <> back, existing_pairs}],
          [{to, existing_pairs}]}
@@ -73,27 +64,19 @@ aoc 2021, 14 do
     {letter_frequencies, pair_frequencies}
   end
 
-  def calculate_score_of_iteration(input \\ input(), n) do
-    {final_sequence, _} =
-      iterate(n, input, fn {sequence, mappings} ->
-        next = perform_insertions(sequence, mappings)
-        {next, mappings}
+  def calculate_score_of_iteration({starting_seq, mappings} \\ input(), n) do
+    {final_letter_freqs, _} =
+      iterate(n, starting_seq, fn sequence ->
+        perform_insertions_lossy(sequence, mappings)
       end)
 
     {{_, min}, {_, max}} =
-      final_sequence
-      |> String.split("", trim: true)
-      |> Enum.frequencies()
+      final_letter_freqs
       |> Enum.min_max_by(&elem(&1, 1))
 
     max - min
   end
 
   def p1, do: calculate_score_of_iteration(10)
-
-  def p2 do
-    {sequence, _mappings} = input()
-
-    to_frequencies(sequence)
-  end
+  def p2, do: calculate_score_of_iteration(40)
 end
