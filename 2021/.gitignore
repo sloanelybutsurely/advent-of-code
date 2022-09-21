@@ -28,4 +28,4 @@ advent_of_code-*.tar
 
 .envrc
 
-priv/inputs/
+input/
