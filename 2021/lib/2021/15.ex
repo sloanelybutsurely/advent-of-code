@@ -11,7 +11,7 @@ aoc 2021, 15 do
         |> Enum.map(&String.to_integer/1)
       end)
 
-    for {row, i} <- Enum.with_index(lists), {cell, j} <- Enum.with_index(row), into: %{} do
+    for {row, i} <- Enum.with_index(lists, 1), {cell, j} <- Enum.with_index(row, 1), into: %{} do
       {{i, j}, cell}
     end
   end
@@ -88,15 +88,43 @@ aoc 2021, 15 do
     end
   end
 
-  def p1 do
-    map = input()
+  # This can totally be done with math oh well
+  def clamp_weight(n) do
+    Stream.cycle(1..9)
+    |> Stream.drop(n - 1)
+    |> Enum.take(1)
+    |> hd()
+  end
 
-    start = {0, 0}
+  def expand_map(tile, n) do
+    {tile_x_size, tile_y_size} = tile |> Map.keys() |> Enum.max()
+
+    for i <- 0..(n - 1), j <- 0..(n - 1), reduce: %{} do
+      map ->
+        Map.merge(
+          map,
+          for {{x, y}, w} <- tile, into: %{} do
+            {{tile_x_size * i + x, tile_y_size * j + y}, clamp_weight(w + i + j)}
+          end
+        )
+    end
+  end
+
+  def lowest_total_risk_to_end(map) do
+    start = {1, 1}
     goal = map |> Map.keys() |> Enum.max()
 
     a_star(map, start, goal)
   end
 
+  def p1 do
+    input()
+    |> lowest_total_risk_to_end()
+  end
+
   def p2 do
+    input()
+    |> expand_map(5)
+    |> lowest_total_risk_to_end()
   end
 end
