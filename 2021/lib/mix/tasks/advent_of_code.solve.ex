@@ -1,5 +1,6 @@
 defmodule Mix.Tasks.AdventOfCode.Solve do
   use Mix.Task
+  import Mix.AdventOfCode
 
   @shortdoc "Runs solution code with problem input"
 
@@ -60,14 +61,31 @@ defmodule Mix.Tasks.AdventOfCode.Solve do
   end
 
   defp stream_for_input(selector, opts) do
-    input = Keyword.get(opts, :input, selector)
+    case Keyword.fetch(opts, :input) do
+      {:ok, "-"} ->
+        {:indeterminate, IO.stream()}
 
-    if input == "-" do
-      {:indeterminate, IO.stream()}
-    else
-      file = Path.join("priv/inputs", "#{input}.input")
-      stream = File.stream!(file)
-      {Enum.count(stream), stream}
+      {:ok, name} ->
+        Path.join("priv/inputs", "#{name}.input")
+        |> get_size_and_stream()
+
+      :error ->
+        [day | _] = String.split(selector, ".")
+
+        file = day_input_path(day)
+
+        unless File.exists?(file) or
+                 not Mix.shell().yes?("Input missing. Fetch input for day #{day}?") do
+          Mix.Task.run("advent_of_code.fetch_input", [day])
+        end
+
+        day_input_path(day)
+        |> get_size_and_stream()
     end
+  end
+
+  def get_size_and_stream(file) do
+    stream = File.stream!(file)
+    {Enum.count(stream), stream}
   end
 end
