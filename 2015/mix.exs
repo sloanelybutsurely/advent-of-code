@@ -26,7 +26,8 @@ defmodule AdventOfCode2015.MixProject do
       {:jason, "~> 1.2"},
       {:libgraph, "~> 0.13.3"},
       {:nimble_parsec, "~> 1.0"},
-      {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true}
+      {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
+      {:rexbug, ">= 1.0.0"}
     ]
   end
 end
