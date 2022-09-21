@@ -27,3 +27,5 @@ advent_of_code-*.tar
 /tmp
 
 .envrc
+
+priv/inputs/
