@@ -13,7 +13,6 @@ defmodule AdventOfCode.PuzzleCase do
         {:ok, stream_pid} = StringIO.open(input)
         stream_input = IO.stream(stream_pid, :line)
         actual_output = AdventOfCode.PuzzleSolver.solve(@module, stream_input)
-        @module.solve(stream_input)
         assert actual_output == desired_output
       end
     end
