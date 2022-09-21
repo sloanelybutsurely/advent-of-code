@@ -1,51 +1,66 @@
 import AOC
 
 aoc 2021, 22 do
-  alias :rstar, as: RStar
-  alias :rstar_geometry, as: RStarGeometry
 
   def p1 do
     input_cuboids()
     |> Enum.filter(&within_range(-50..50, &1))
-    |> Enum.reduce(MapSet.new(), fn
-      {:on, ranges}, acc -> MapSet.union(acc, make_set(ranges))
-      {:off, ranges}, acc -> MapSet.difference(acc, make_set(ranges))
-    end)
-    |> MapSet.size()
+    |> calculate_final_lights_on()
   end
 
-  def make_set({xs, ys, zs}) do
-    for x <- xs, y <- ys, z <- zs, into: MapSet.new(), do: {x, y, z}
+  def p2 do
+    input_cuboids()
+    |> calculate_final_lights_on()
   end
+
+  def calculate_final_lights_on(inp) do
+    {ons, offs} = Enum.reduce(inp, {[], []}, fn
+      {op, cuboid}, {seen, intersections} ->
+        IO.puts("")
+        IO.puts("--------------")
+        IO.puts("")
+        IO.inspect(cuboid)
+        intersections =
+          Enum.concat([
+            intersections,
+            seen
+            |> Enum.filter(&intersect?(&1, cuboid))
+            |> IO.inspect()
+            |> Enum.map(fn intersected ->
+              intersected
+              |> intersection(cuboid)
+            end)
+            |> IO.inspect()
+          ])
+
+        seen = if op == :on, do: [cuboid | seen], else: seen
+
+        {seen, intersections}
+    end)
+
+    {sum_volumes(ons), sum_volumes(offs)}
+  end
+
+  def sum_volumes(ranges), do:
+    ranges
+    |> Enum.map(&volume/1)
+    |> Enum.sum()
 
   def within_range(bounds, {tag, ranges}) when tag in ~w[on off]a, do: within_range(bounds, ranges)
   def within_range(bounds, {x, y, z}), do:
     [x, y, z] |> Enum.all?(&within_range(bounds, &1))
   def within_range(bs..be, s..e), do: bs <= s and e <= be
 
-  def p2 do
-    input_cuboids()
-    |> Enum.reduce(RStar.new(3), fn
-      {:on, {x1..x2, y1..y2, z1..z2}}, tree ->
-        cuboid = RStarGeometry.new(3, [{x1, x2}, {y1, y2}, {z1, z2}], nil)
+  def intersect?({a1, b1, c1}, {a2, b2, c2}), do:
+    intersect?(a1, a2) and intersect?(b1, b2) and intersect?(c1, c2)
+  def intersect?(a, b), do: not Range.disjoint?(a, b)
 
-        IO.inspect(cuboid)
-        RStar.search_within(tree, cuboid)
-        |> Enum.each(fn geo ->
-          IO.write(" ... ")
-          IO.inspect(RStarGeometry.intersect(cuboid, geo))
-        end)
-
-        IO.gets("")
-
-        RStar.insert(tree, cuboid)
-      _, tree -> tree
-    end)
+  def intersection({min_x_a..max_x_a, min_y_a..max_y_a, min_z_a..max_z_a}, {min_x_b..max_x_b, min_y_b..max_y_b, min_z_b..max_z_b}) do
+    {(max(min_x_a, min_x_b))..min(max_x_a, max_x_b), max(min_y_a, min_y_b)..min(max_y_a, max_y_b), max(min_z_a, min_z_b)..min(max_z_a, max_z_b)}
   end
 
-  def intersect?({a1, b1, c1}, {a2, b2, c2}), do:
-    intersect?(a1, a2) or intersect?(b1, b2) or intersect?(c1, c2)
-  def intersect?(a, b), do: not Range.disjoint?(a, b)
+  def volume(bounds), do:
+    bounds |> Tuple.to_list() |> Enum.map(&Range.size/1) |> Enum.product()
 
   def parse_cuboid_ranges(str) do
     ~r/x=(-?\d+)..(-?\d+),y=(-?\d+)..(-?\d+),z=(-?\d+)..(-?\d+)/
