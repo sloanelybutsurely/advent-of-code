@@ -3,9 +3,19 @@ defmodule AdventOfCode.Day01.Part2Test do
 
   test "returns :ok" do
     input = ~S"""
-    input
+    199
+    200
+    208
+    210
+    200
+    207
+    240
+    269
+    260
+    263
     """
 
-    assert_solution(input, "ok")
+    assert_solution(input, 5)
   end
 end
+

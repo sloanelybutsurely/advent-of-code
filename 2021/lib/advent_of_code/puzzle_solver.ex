@@ -6,7 +6,7 @@ defmodule AdventOfCode.PuzzleSolver do
   @doc """
   Given the input as a stream, return the solution as a string
   """
-  @callback solve(Enumerable.t()) :: String.t()
+  @callback solve(Enumerable.t()) :: any()
 
   def solve(mod, stream), do: apply(mod, :solve, [stream])
 

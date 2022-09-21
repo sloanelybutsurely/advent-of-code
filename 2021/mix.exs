@@ -26,6 +26,7 @@ defmodule AdventOfCode.MixProject do
   defp deps do
     [
       {:finch, "~> 0.9.0"},
+      {:mix_test_interactive, "~> 1.0", only: :dev, runtime: false},
       {:progress_bar, "~> 2.0"}
     ]
   end
