@@ -5,7 +5,11 @@ aoc 2021, 18 do
 
   def p1 do
     input()
-    |> Enum.reduce(fn x, acc -> reduce([acc, x]) end)
+    |> Enum.reduce(fn x, acc ->
+      result = reduce([acc, x])
+      IO.write(".")
+      result
+    end)
     |> magnitude()
   end
 
@@ -23,8 +27,8 @@ aoc 2021, 18 do
     recurse = op != :none
     result = apply_op(op, xs)
 
-    IO.inspect(op, label: "op")
-    IO.inspect(result, label: "result")
+    # IO.inspect(op, label: "op")
+    # IO.inspect(result, label: "result")
 
     if recurse, do: reduce(result), else: result
   end
@@ -43,39 +47,53 @@ aoc 2021, 18 do
   def apply_op(:none, xs), do: xs
   def apply_op({:explode, path}, xs) do
     case explode(path, xs) do
-      {_, xs} -> xs
+      # {_, xs} -> xs
       xs -> xs
     end
   end
   def apply_op({:split, path}, xs), do: split(path, xs)
 
-  def explode([:l], [a, b]) do
-    [l, r] = a
-    {{:l, l}, [0, add_car(b, r)]}
-  end
-  def explode([:r], [a, b]) do
-    [l, r] = b
-    {{:r, r}, [add_car(a, l), 0]}
-  end
-  def explode([:l | path], [a, b]) do
-    case explode(path, a) do
-      {{:r, r}, a} -> add_cdr([a, b], r)
-      {op, a} -> {op, [a, b]}
-      a -> [a, b]
-    end
-  end
-  def explode([:r | path], [a, b]) do
-    case explode(path, b) do
-      {{:l, l}, b} -> add_car([a, b], l)
-      {op, b} -> {op, [a, b]}
-      b -> [a, b]
-    end
+  def explode(path, xs) do
+    {adds, xs} = zero_out_exploded(path, xs)
+    add_exploded(path, adds, xs)
   end
 
-  def add_car([a, b], v), do: [add_cdr(a, v), b]
-  def add_car(car, v), do: car + v
-  def add_cdr([a, b], v), do: [a, add_car(b, v)]
-  def add_cdr(cdr, v), do: cdr + v
+  def zero_out_exploded([], [a, b]), do: {[a, b], 0}
+  def zero_out_exploded([:l | path], [a, b]) do
+    {ret, a} = zero_out_exploded(path, a)
+    {ret, [a, b]}
+  end
+  def zero_out_exploded([:r | path], [a, b]) do
+    {ret, b} = zero_out_exploded(path, b)
+    {ret, [a, b]}
+  end
+
+  def add_exploded([:r], [l, _], [a, b]) do
+    [add_r(a, l), b]
+  end
+  def add_exploded([:l], [_, r], [a, b]) do
+    [a, add_l(b, r)]
+  end
+  def add_exploded([:l | path], [_, r] = adds, [a, b]) do
+    if :l in path do
+      [add_exploded(path, adds, a), b]
+    else
+      [add_exploded(path, adds, a), add_l(b, r)]
+    end
+  end
+  def add_exploded([:r | path], [l, _] = adds, [a, b]) do
+    if :r in path do
+      [a, add_exploded(path, adds, b)]
+    else
+      [add_r(a, l), add_exploded(path, adds, a)]
+    end
+  end
+  def add_exploded(_, _, other), do: other
+
+  def add_r([a, b], n), do: [a, add_r(b, n)]
+  def add_r(b, n), do: b + n
+  def add_l([a, b], n), do: [add_l(a, n), b]
+  def add_l(a, n), do: a + n
 
   def split([], v) when is_even(v), do: [div(v, 2), div(v, 2)]
   def split([], v) when is_odd(v), do: [div(v, 2), div(v, 2) + 1]
