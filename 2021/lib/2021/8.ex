@@ -69,19 +69,62 @@ aoc 2021, 8 do
 
   def add_mappings(_, mappings), do: mappings
 
-  def infer_mappings(words),
-    do:
-      words
-      |> Enum.sort_by(&length/1)
-      |> IO.inspect()
-      |> Enum.reduce(%{}, &add_mappings/2)
+  def infer_mappings(words) do
+    one = Enum.find(words, &(length(&1) == 2)) |> MapSet.new()
+    seven = Enum.find(words, &(length(&1) == 3)) |> MapSet.new()
+    eight = Enum.find(words, &(length(&1) == 7)) |> MapSet.new()
+    four = Enum.find(words, &(length(&1) == 4)) |> MapSet.new()
+
+    bd = MapSet.difference(four, one)
+
+    [six | two_five] =
+      Enum.reject(words, fn word ->
+        MapSet.subset?(one, MapSet.new(word))
+      end)
+      |> Enum.sort_by(&length/1, :desc)
+      |> Enum.map(&MapSet.new/1)
+
+    [c] = MapSet.difference(eight, six) |> MapSet.to_list()
+    [f] = MapSet.delete(one, c) |> MapSet.to_list()
+
+    nine =
+      Enum.find(words, fn word ->
+        length(word) == 6 and not MapSet.equal?(MapSet.new(word), six)
+      end)
+      |> MapSet.new()
+
+    [e] = MapSet.difference(eight, nine) |> MapSet.to_list()
+
+    five = MapSet.delete(six, e)
+    two = Enum.find(two_five, &(not MapSet.equal?(&1, five)))
+
+    three = two |> MapSet.delete(e) |> MapSet.put(f)
+
+    [b] = MapSet.difference(nine, three) |> MapSet.to_list()
+    [d] = MapSet.delete(bd, b) |> MapSet.to_list()
+
+    zero = MapSet.delete(eight, d)
+
+    %{
+      MapSet.to_list(zero) => 0,
+      MapSet.to_list(one) => 1,
+      MapSet.to_list(two) => 2,
+      MapSet.to_list(three) => 3,
+      MapSet.to_list(four) => 4,
+      MapSet.to_list(five) => 5,
+      MapSet.to_list(six) => 6,
+      MapSet.to_list(seven) => 7,
+      MapSet.to_list(eight) => 8,
+      MapSet.to_list(nine) => 9
+    }
+  end
 
   def rewire(mappings, word), do: Enum.map(word, &Map.get(mappings, &1, ?x)) |> Enum.sort()
 
   def render_mappings(mappings) do
     s = 32
     IO.inspect(mappings)
-    [a, b, c, d, e, f, g] = ?a..?g |> Enum.map(&Map.get(mappings, &1))
+    [a, b, c, d, e, f, g] = ?a..?g |> Enum.map(&Map.get(mappings, &1, ?x))
 
     Enum.map(
       [
@@ -112,11 +155,10 @@ aoc 2021, 8 do
   def p2 do
     parse_input()
     |> Enum.map(fn {signals, output} ->
-      mappings = infer_mappings(signals ++ output)
+      mappings = infer_mappings(signals)
 
       output
-      |> Enum.map(&rewire(mappings, &1))
-      |> Enum.map(&decode_digit/1)
+      |> Enum.map(&Map.get(mappings, &1))
       |> Integer.undigits()
       |> IO.inspect()
     end)
