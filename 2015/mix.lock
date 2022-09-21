@@ -2,6 +2,7 @@
   "advent_of_code_utils": {:hex, :advent_of_code_utils, "1.0.0", "e9ce8be22988e095991168e9d2dde802afc213aaae64491e9fde84dd877db41c", [:mix], [], "hexpm", "1fa5217ccb95a38ce2312dd7ea6057b0d0002a3eba7490feab704df4b8a94038"},
   "elixir_make": {:hex, :elixir_make, "0.6.3", "bc07d53221216838d79e03a8019d0839786703129599e9619f4ab74c8c096eac", [:mix], [], "hexpm", "f5cbd651c5678bcaabdbb7857658ee106b12509cd976c2c2fca99688e1daf716"},
   "exla": {:git, "https://github.com/elixir-nx/nx.git", "e23a678bf0ebcbbafe03f1b5ed78623f052ad486", [sparse: "exla"]},
+  "jason": {:hex, :jason, "1.2.2", "ba43e3f2709fd1aa1dce90aaabfd039d000469c05c56f0b8e31978e03fa39052", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "18a228f5f0058ee183f29f9eae0805c6e59d61c3b006760668d8d18ff0d12179"},
   "libgraph": {:hex, :libgraph, "0.13.3", "20732b7bafb933dcf7351c479e03076ebd14a85fd3202c67a1c197f4f7c2466b", [:mix], [], "hexpm", "78f2576eef615440b46f10060b1de1c86640441422832052686df53dc3c148c6"},
   "nimble_parsec": {:hex, :nimble_parsec, "1.2.0", "b44d75e2a6542dcb6acf5d71c32c74ca88960421b6874777f79153bbbbd7dccc", [:mix], [], "hexpm", "52b2871a7515a5ac49b00f214e4165a40724cf99798d8e4a65e4fd64ebd002c1"},
   "nx": {:git, "https://github.com/elixir-nx/nx.git", "e23a678bf0ebcbbafe03f1b5ed78623f052ad486", [sparse: "nx"]},
