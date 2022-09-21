@@ -25,7 +25,10 @@ defmodule AdventOfCode.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:advent_of_code_utils, "~> 1.0"}
+      {:advent_of_code_utils, "~> 1.0"},
+      {:benchee, "~> 1.0", only: :dev},
+      {:exla, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "exla"},
+      {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true}
     ]
   end
 end

@@ -2,6 +2,32 @@ import AOC
 
 aoc 2021, 3 do
   def p1 do
+    sums =
+      input_stream()
+      |> Stream.map(fn w ->
+        String.split(w, "", trim: true)
+        |> Enum.map(&if &1 == "0", do: "-1", else: &1)
+        |> Enum.map(&String.to_integer/1)
+      end)
+      |> Enum.to_list()
+      |> Nx.tensor(type: {:s, 8})
+      |> Nx.sum(axes: [0])
+      |> Nx.to_flat_list()
+
+    for digit <- sums, reduce: {"", ""} do
+      {gamma, epsilon} ->
+        if digit > 0 do
+          {gamma <> "1", epsilon <> "0"}
+        else
+          {gamma <> "0", epsilon <> "1"}
+        end
+    end
+    |> then(fn {gamma, epsilon} ->
+      String.to_integer(gamma, 2) * String.to_integer(epsilon, 2)
+    end)
+  end
+
+  def p1_ do
     [first] = Stream.take(input_stream(), 1) |> Enum.to_list()
 
     bit_length = String.length(first)
