@@ -34,23 +34,23 @@ aoc 2021, 19 do
   def union(map_sets), do: Enum.reduce(map_sets, MapSet.new(), &MapSet.union/2)
 
   def align_scanners([start | rest]) do
-    align_scanners(rest, [start])
+    align_scanners(rest, start)
   end
 
-  def align_scanners(scanners, included, skipped \\ [])
-  def align_scanners([], included, []), do: union(included)
-  def align_scanners([], included, skipped) do
+  def align_scanners(scanners, aligned, skipped \\ [])
+  def align_scanners([], aligned, []), do: aligned
+  def align_scanners([], aligned, skipped) do
     IO.puts("")
-    align_scanners([union(included) | skipped])
+    align_scanners([aligned | skipped])
   end
-  def align_scanners([canidate | rest], included, skipped) do
-    case union(included) |> attempt_alignment(canidate) do
+  def align_scanners([canidate | rest], aligned, skipped) do
+    case aligned |> attempt_alignment(canidate) do
       :miss -> 
         IO.write(".")
-        align_scanners(rest, included, [canidate | skipped])
+        align_scanners(rest, aligned, [canidate | skipped])
       {:ok, transformed} ->
         IO.write("+")
-        align_scanners(rest, [transformed | included], skipped)
+        align_scanners(rest, MapSet.union(transformed, aligned), skipped)
     end
   end
 
