@@ -31,7 +31,8 @@ defmodule AdventOfCode.MixProject do
       {:libgraph, "~> 0.13.3"},
       {:nimble_parsec, "~> 1.0"},
       {:nx, "~> 0.1.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
-      {:rexbug, ">= 1.0.0"}
+      {:rexbug, ">= 1.0.0"},
+      {:timex, "~> 3.7.6"}
     ]
   end
 end

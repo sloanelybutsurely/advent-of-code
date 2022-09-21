@@ -1,6 +1,44 @@
 import AOC
 
+defmodule PriorityQueue2 do
+  defstruct [:p_queue, :map_set]
+
+  def new() do
+    %__MODULE__{
+      p_queue: PriorityQueue.new(),
+      map_set: MapSet.new()
+    }
+  end
+
+  def push(%__MODULE__{p_queue: p_queue, map_set: map_set} = p_queue_2, key, weight) do
+    if MapSet.member?(map_set, key) do
+      p_queue_2
+    else
+      %__MODULE__{
+        p_queue: PriorityQueue.push(p_queue, key, weight),
+        map_set: MapSet.put(map_set, key)
+      }
+    end
+  end
+
+  def pop(%__MODULE__{p_queue: p_queue, map_set: map_set} = p_queue_2) do
+    case PriorityQueue.pop(p_queue) do
+      {{:value, key} = result, p_queue} ->
+        {result,
+         %__MODULE__{
+           p_queue: p_queue,
+           map_set: MapSet.delete(map_set, key)
+         }}
+
+      {:empty = result, _} ->
+        {result, p_queue_2}
+    end
+  end
+end
+
 aoc 2021, 15 do
+  use Timex
+
   def input(input_string \\ input_string()) do
     lists =
       input_string
@@ -33,8 +71,8 @@ aoc 2021, 15 do
 
   def a_star(map, start, goal) do
     open =
-      PriorityQueue.new()
-      |> PriorityQueue.push(start, 0)
+      PriorityQueue2.new()
+      |> PriorityQueue2.push(start, 0)
 
     g_scores = %{start => 0}
     f_scores = %{start => manhattan_dist(start, goal)}
@@ -42,14 +80,8 @@ aoc 2021, 15 do
     a_star(map, goal, open, g_scores, f_scores)
   end
 
-  # Gets into PriorityQueue implementation details and is slow...
-  # https://github.com/bitwalker/libgraph/blob/46c435f507f8b99f3f14c96d380eda28e5e9c7de/lib/priority_queue.ex#L129-L132
-  def p_queue_member?(%PriorityQueue{priorities: tree}, v) do
-    v in (:gb_trees.to_list(tree) |> Enum.flat_map(fn {_, q} -> :queue.to_list(q) end))
-  end
-
   def a_star(map, goal, open, g_scores, f_scores) do
-    case PriorityQueue.pop(open) do
+    case PriorityQueue2.pop(open) do
       {{:value, curr}, open} ->
         if curr == goal do
           f_scores[curr]
@@ -69,10 +101,7 @@ aoc 2021, 15 do
                       tentative_g_score + manhattan_dist(neighbor, goal)
                     )
 
-                  open =
-                    if p_queue_member?(open, neighbor),
-                      do: open,
-                      else: PriorityQueue.push(open, neighbor, f_scores[neighbor])
+                  open = PriorityQueue2.push(open, neighbor, f_scores[neighbor])
 
                   {open, g_scores, f_scores}
                 else
@@ -114,7 +143,14 @@ aoc 2021, 15 do
     start = {1, 1}
     goal = map |> Map.keys() |> Enum.max()
 
-    a_star(map, start, goal)
+    {duration, result} =
+      Duration.measure(fn ->
+        a_star(map, start, goal)
+      end)
+
+    duration = Timex.format_duration(duration, :humanized)
+
+    "Result #{result} found in #{duration}"
   end
 
   def p1 do
