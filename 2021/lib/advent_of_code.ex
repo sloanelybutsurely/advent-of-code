@@ -16,6 +16,8 @@ defmodule AdventOfCode do
     Module.concat(AdventOfCode, Macro.camelize("Day#{day_number(day)}"))
   end
 
+  def day_input_path(day), do: "priv/inputs/#{day_number(day)}.input"
+
   defp day_number(day), do: String.pad_leading(day, 2, "0")
   defp part_number(part), do: String.trim_leading(part, "0")
 end

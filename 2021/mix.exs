@@ -25,6 +25,7 @@ defmodule AdventOfCode.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:finch, "~> 0.9.0"},
       {:progress_bar, "~> 2.0"}
     ]
   end

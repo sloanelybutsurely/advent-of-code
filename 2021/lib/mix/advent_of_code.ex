@@ -5,4 +5,5 @@ defmodule Mix.AdventOfCode do
 
   defdelegate day_module(day), to: AdventOfCode
   defdelegate part_module(day, part), to: AdventOfCode
+  defdelegate day_input_path(day), to: AdventOfCode
 end
