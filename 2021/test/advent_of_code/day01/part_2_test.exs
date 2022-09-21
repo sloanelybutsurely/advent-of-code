@@ -1,7 +1,7 @@
 defmodule AdventOfCode.Day01.Part2Test do
   use AdventOfCode.PuzzleCase, module: AdventOfCode.Day01.Part2
 
-  test "returns :ok" do
+  test "solves for a small input" do
     input = ~S"""
     199
     200
@@ -18,4 +18,3 @@ defmodule AdventOfCode.Day01.Part2Test do
     assert_solution(input, 5)
   end
 end
-

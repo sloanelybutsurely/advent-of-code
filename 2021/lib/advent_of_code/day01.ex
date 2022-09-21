@@ -7,6 +7,7 @@ defmodule AdventOfCode.Day01 do
     input_stream
     |> Stream.map(&String.trim/1)
     |> Stream.map(&String.to_integer/1)
+    |> Enum.to_list()
   end
 end
 
@@ -22,22 +23,15 @@ defmodule AdventOfCode.Day01.Part1 do
 
   @impl PuzzleSolver
   def solve(input_stream) do
-    depth_stream =
-      input_stream
-      |> parse_input_stream()
-      |> Enum.to_list()
+    depths = parse_input_stream(input_stream)
 
-    Enum.zip_with(
-      depth_stream,
-      Enum.drop(depth_stream, 1),
-      &</2
+    Enum.zip_reduce(
+      depths,
+      Enum.drop(depths, 1),
+      0,
+      &if(&1 < &2, do: &3 + 1, else: &3)
     )
-    |> Stream.filter(&is_true?/1)
-    |> Enum.count()
   end
-
-  defp is_true?(true), do: true
-  defp is_true?(_), do: false
 end
 
 defmodule AdventOfCode.Day01.Part2 do
@@ -53,7 +47,6 @@ defmodule AdventOfCode.Day01.Part2 do
   @impl PuzzleSolver
   def solve(input_stream) do
     parse_input_stream(input_stream)
-    |> Enum.to_list()
     |> window_increases()
   end
 
