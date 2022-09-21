@@ -23,24 +23,18 @@ defmodule Mix.Tasks.AdventOfCode.Gen.Solution do
     case OptionParser.parse!(args, switches: @switches) do
       {_, [day]} ->
         day_module = day_module(day)
-        day_contents = day_template(mod: day_module) |> Code.format_string!()
+        day_contents = day_template(mod: day_module, day: day) |> Code.format_string!()
         day_path = Path.join("lib", Macro.underscore(day_module))
         day_tests_path = Path.join("test", Macro.underscore(day_module))
         day_file = "#{day_path}.ex"
 
-        create_directory(day_path)
-        create_directory(day_tests_path)
         create_file(day_file, day_contents)
+
+        create_directory(day_tests_path)
 
         for part <- 1..2 do
           part = to_string(part)
           part_module = part_module(day, part)
-
-          part_contents =
-            part_template(mod: part_module, day_mod: day_module) |> Code.format_string!()
-
-          part_file = Path.join("lib", "#{Macro.underscore(part_module)}.ex")
-          create_file(part_file, part_contents)
 
           part_test_module = Module.concat(day_module, Macro.camelize("Part#{part}Test"))
 
@@ -59,25 +53,47 @@ defmodule Mix.Tasks.AdventOfCode.Gen.Solution do
     end
   end
 
-  embed_template(:day, ~S"""
+  embed_template(:day, ~S[
     defmodule <%= inspect(@mod) %> do
+      @moduledoc """
+      Day <%= @day %>
+      """
+
 
     end
-  """)
 
-  embed_template(:part, ~S"""
-    defmodule <%= inspect(@mod) %> do
+    defmodule <%= inspect(@mod) %>.Part1 do
+      @moduledoc """
+      Day <%= @day %>, Part 1
+      """
+
       alias AdventOfCode.PuzzleSolver
       use PuzzleSolver
 
-      import <%= inspect(@day_mod) %>, warn: false
+      import <%= inspect(@mod) %>, warn: false
 
       @impl PuzzleSolver
       def solve(_input_stream) do
         :ok |> to_string()
       end
     end
-  """)
+
+    defmodule <%= inspect(@mod) %>.Part2 do
+      @moduledoc """
+      Day <%= @day %>, Part 2
+      """
+
+      alias AdventOfCode.PuzzleSolver
+      use PuzzleSolver
+
+      import <%= inspect(@mod) %>, warn: false
+
+      @impl PuzzleSolver
+      def solve(_input_stream) do
+        :ok |> to_string()
+      end
+    end
+  ])
 
   embed_template(:part_test, ~S[
     defmodule <%= inspect(@test_mod) %> do
