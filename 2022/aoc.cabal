@@ -1,30 +1,61 @@
-name:                aoc
-version:             0.1.0.0
--- synopsis:
--- description:
-homepage:            https://github.com/sloanelybutsurely/aoc#readme
-license:             BSD3
-license-file:        LICENSE
-author:              Sloane Perrault
-maintainer:          sloane.perrault@gmail.com
-copyright:           none
-category:            puzzles
-build-type:          Simple
-cabal-version:       >=1.10
-extra-source-files:  README.md
-                     CHANGELOG.md
+cabal-version: 1.12
 
-executable aoc
-  hs-source-dirs:      src
-  main-is:             Main.hs
-  default-language:    Haskell2010
-  build-depends:       base >= 4.7 && < 5
-  ghc-options:         -Wall
-                       -Wcompat
-                       -Widentities
-                       -Wincomplete-record-updates
-                       -Wincomplete-uni-patterns
-                       -Wmissing-export-lists
-                       -Wmissing-home-modules
-                       -Wpartial-fields
-                       -Wredundant-constraints
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           aoc
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/sloanelybutsurely/aoc#readme>
+homepage:       https://github.com/sloanelybutsurely/aoc#readme
+bug-reports:    https://github.com/sloanelybutsurely/aoc/issues
+author:         Sloane Perrault
+maintainer:     sloane.perrault@gmail.com
+copyright:      none
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+
+source-repository head
+  type: git
+  location: https://github.com/sloanelybutsurely/aoc
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_aoc
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+
+executable aoc-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_aoc
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aoc
+    , base >=4.7 && <5
+  default-language: Haskell2010
+
+test-suite aoc-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_aoc
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aoc
+    , base >=4.7 && <5
+  default-language: Haskell2010
