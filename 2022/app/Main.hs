@@ -2,32 +2,18 @@
 module Main (main) where
 
 import System.Environment (getArgs)
-import Data.Ord 
-import Data.List (sortBy)
-import Data.Text (pack, splitOn, unpack)
-    
-parseInput :: String -> [[Integer]]
-parseInput = (map (map read . words . unpack)) . splitOn "\n\n" . pack
-
-inputSums :: String -> [Integer]
-inputSums = map sum . parseInput
-
-part1 :: String -> Integer
-part1 = maximum . inputSums
-
-part2 :: String -> Integer 
-part2 = sum . take 3 . sortDesc . inputSums
-  where
-    sortDesc = sortBy (comparing Down)
+import qualified Aoc.Day1
 
 main :: IO ()
 main = do
-  args <- getArgs
-  contents <- getContents
+  (dayS:partS:_) <- getArgs
+  let day = read dayS :: Integer
+  let part = read partS :: Integer
 
-  let f = case args of ("1":_) -> part1
-                       ("2":_) -> part2
-                       _ -> error "unknown part"
+  contents <- readFile ("input/" ++ (show day) ++ ".txt")
 
-  putStrLn $ show $ f contents
+  let f = case day of 1 -> Aoc.Day1.solve
+                      _ -> error "unknown day"
+
+  putStrLn $ show $ f part contents
 
