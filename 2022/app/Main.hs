@@ -1,31 +1,33 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main (main) where
 
-import Data.List (sort)
-import Data.Text (Text, pack, splitOn, unpack)
+import System.Environment (getArgs)
+import Data.Ord 
+import Data.List (sortBy)
+import Data.Text (pack, splitOn, unpack)
     
+parseInput :: String -> [[Integer]]
+parseInput = (map (map read . words . unpack)) . splitOn "\n\n" . pack
+
+inputSums :: String -> [Integer]
+inputSums = map sum . parseInput
 
 part1 :: String -> Integer
-part1 str = findMax lines' [] 0
-  where
-    lines' = lines str
-    findMax [] acc cMax = max (sum acc) cMax
-    findMax ("":xs) acc cMax = findMax xs [] $ max (sum acc) cMax
-    findMax (x:xs) acc cMax = findMax xs ((read x):acc) cMax
-
-chunkElves :: Text -> [Integer]
-chunkElves t = integers
-  where
-    textChunks = splitOn "\n\n" t
-    integerChunks = map (map read . words . unpack) textChunks
-    integers = map sum integerChunks
+part1 = maximum . inputSums
 
 part2 :: String -> Integer 
-part2 str = sum $ take 3 $ reverse $ sort $ chunkElves $ pack str
+part2 = sum . take 3 . sortDesc . inputSums
+  where
+    sortDesc = sortBy (comparing Down)
 
 main :: IO ()
 main = do
+  args <- getArgs
   contents <- getContents
 
-  putStrLn $ show $ part2 contents
+  let f = case args of ("1":_) -> part1
+                       ("2":_) -> part2
+                       _ -> error "unknown part"
+
+  putStrLn $ show $ f contents
 
