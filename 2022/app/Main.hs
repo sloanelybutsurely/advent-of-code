@@ -3,6 +3,7 @@ module Main (main) where
 
 import System.Environment (getArgs)
 import qualified Aoc.Day1
+import qualified Aoc.Day2
 
 main :: IO ()
 main = do
@@ -13,6 +14,7 @@ main = do
   contents <- readFile ("input/" ++ (show day) ++ ".txt")
 
   let f = case day of 1 -> Aoc.Day1.solve
+                      2 -> Aoc.Day2.solve
                       _ -> error "unknown day"
 
   putStrLn $ show $ f part contents
