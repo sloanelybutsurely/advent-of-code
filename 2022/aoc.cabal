@@ -25,9 +25,11 @@ source-repository head
 
 library
   exposed-modules:
+      Aoc
       Aoc.Day1
       Aoc.Day2
       Aoc.Day3
+      Aoc.Day4
   other-modules:
       Paths_aoc
   hs-source-dirs:
