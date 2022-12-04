@@ -42,9 +42,11 @@ overlap ((a, b), (c, d))
   | d < a     = False -- first is fully to the right of second
   | otherwise = True  -- there's some overlap
 
-solve :: Integer -> String -> Integer
-solve 1 input = fromIntegral $ length $ filter fullOverlap $ parse input
+solve' :: String -> (Row -> Bool) -> Integer
+solve' input predicate = fromIntegral $ length $ filter predicate $ parse input
 
-solve 2 input = fromIntegral $ length $ filter overlap $ parse input
+solve :: Integer -> String -> Integer
+solve 1 input = solve' input fullOverlap
+solve 2 input = solve' input overlap
 
 solve _ _ = 0
