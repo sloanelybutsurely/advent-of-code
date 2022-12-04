@@ -27,6 +27,7 @@ library
   exposed-modules:
       Aoc.Day1
       Aoc.Day2
+      Aoc.Day3
   other-modules:
       Paths_aoc
   hs-source-dirs:
@@ -34,6 +35,8 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , containers
+    , split
     , text
   default-language: Haskell2010
 
@@ -47,6 +50,8 @@ executable aoc-exe
   build-depends:
       aoc
     , base >=4.7 && <5
+    , containers
+    , split
     , text
   default-language: Haskell2010
 
@@ -61,5 +66,7 @@ test-suite aoc-test
   build-depends:
       aoc
     , base >=4.7 && <5
+    , containers
+    , split
     , text
   default-language: Haskell2010
