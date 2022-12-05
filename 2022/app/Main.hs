@@ -6,6 +6,7 @@ import qualified Aoc.Day1
 import qualified Aoc.Day2
 import qualified Aoc.Day3
 import qualified Aoc.Day4
+import qualified Aoc.Day5
 
 main :: IO ()
 main = do
@@ -19,6 +20,7 @@ main = do
                       2 -> Aoc.Day2.solve
                       3 -> Aoc.Day3.solve
                       4 -> Aoc.Day4.solve
+                      5 -> Aoc.Day5.solve
                       _ -> error "unknown day"
 
   putStrLn $ f part contents
