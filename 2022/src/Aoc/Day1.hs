@@ -19,6 +19,7 @@ part2 = sum . take 3 . sortDesc . inputSums
   where
     sortDesc = sortBy (comparing Down)
 
-solve :: Integer -> String -> Integer
-solve 1 input = part1 input
-solve 2 input = part2 input
+solve :: Integer -> String -> String
+solve 1 input = show $ part1 input
+solve 2 input = show $ part2 input
+solve _ _ = "?"

@@ -45,8 +45,8 @@ overlap ((a, b), (c, d))
 solve' :: String -> (Row -> Bool) -> Integer
 solve' input predicate = fromIntegral $ length $ filter predicate $ parse input
 
-solve :: Integer -> String -> Integer
-solve 1 input = solve' input fullOverlap
-solve 2 input = solve' input overlap
+solve :: Integer -> String -> String
+solve 1 input = show $ solve' input fullOverlap
+solve 2 input = show $ solve' input overlap
 
-solve _ _ = 0
+solve _ _ = "?"

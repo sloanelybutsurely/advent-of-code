@@ -21,9 +21,9 @@ charToInt c
   | 'A' <= c && c <= 'Z' = ord c - ord 'A' + 27
   | otherwise            = -1
 
-solve :: Integer -> String -> Integer
-solve 1 input = sum $ map (toInteger . charToInt . head . shared . halve) $ lines input
+solve :: Integer -> String -> String
+solve 1 input = show $ sum $ map (toInteger . charToInt . head . shared . halve) $ lines input
 
-solve 2 input = sum $ map (toInteger . charToInt . head . shared) $ chunksOf 3 $ lines input
+solve 2 input = show $ sum $ map (toInteger . charToInt . head . shared) $ chunksOf 3 $ lines input
 
-solve _ _ = 0
+solve _ _ = "?"

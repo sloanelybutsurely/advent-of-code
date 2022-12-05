@@ -19,8 +19,8 @@ scoreGame _          = 0
 totalScore :: [[String]] -> Integer
 totalScore = sum . map scoreGame
 
-solve :: Integer -> String -> Integer
-solve 1 input = totalScore games
+solve :: Integer -> String -> String
+solve 1 input = show $ totalScore games
   where
     games = map convertGuide $ parseInput input
 
@@ -29,7 +29,7 @@ solve 1 input = totalScore games
     convertGuide [p, "Z"] = [p, "C"]
     convertGuide xs       = xs
 
-solve 2 input = totalScore games
+solve 2 input = show $ totalScore games
   where
     games = map solveGuide $ parseInput input
 
@@ -45,4 +45,4 @@ solve 2 input = totalScore games
     solveGuide ["C", "Z"] = ["C", "A"]
     solveGuide xs         = xs
 
-solve _ _ = 0
+solve _ _ = "?"

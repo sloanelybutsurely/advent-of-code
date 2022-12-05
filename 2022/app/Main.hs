@@ -21,5 +21,5 @@ main = do
                       4 -> Aoc.Day4.solve
                       _ -> error "unknown day"
 
-  putStrLn $ show $ f part contents
+  putStrLn $ f part contents
 
