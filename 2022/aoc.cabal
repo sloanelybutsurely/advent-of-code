@@ -31,6 +31,7 @@ library
       Aoc.Day3
       Aoc.Day4
       Aoc.Day5
+      Aoc.Day6
   other-modules:
       Paths_aoc
   hs-source-dirs:
