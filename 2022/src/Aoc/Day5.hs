@@ -2,9 +2,8 @@ module Aoc.Day5 (solve) where
 
 import Aoc (runReadP)
 import Data.Char (isDigit)
-import Data.Maybe
 import Data.List (transpose)
-import Data.IntMap.Strict (IntMap)
+import Data.IntMap.Strict (IntMap, (!))
 import qualified Data.IntMap.Strict as IntMap
 import Text.ParserCombinators.ReadP
 
@@ -53,12 +52,18 @@ parseInput input = Input { state = state, procedure = procedure }
     procedureContents = drop 1 $ dropWhile (/= "") $ lines input
     procedure = map parseMove procedureContents
 
-doMove :: Move -> State -> State
-doMove m s = s'
+doMove :: State -> Move -> State
+doMove stacks (Move n x y) = IntMap.insert x newX (IntMap.insert y newY stacks)
   where
-    (forTo, backToFrom) = splitAt (amount m) $ fromJust $ IntMap.lookup (from m) s
-    addToTo to' = Just $ (reverse forTo) ++ to'
-    s' = IntMap.update addToTo (to m) $ IntMap.insert (from m) backToFrom s
+    (toPush, newX) = splitAt n (stacks ! x)
+    newY = reverse toPush ++ stacks ! y
+
+-- no reverse
+doMove' :: State -> Move -> State
+doMove' stacks (Move n x y) = IntMap.insert x newX (IntMap.insert y newY stacks)
+  where
+    (toPush, newX) = splitAt n (stacks ! x)
+    newY = toPush ++ stacks ! y
 
 stackLabel :: Stack -> String
 stackLabel [] = ""
@@ -68,7 +73,13 @@ message :: State -> String
 message s = concat $ map stackLabel $ IntMap.elems s
 
 solve :: Integer -> String -> String
-solve 1 input = message $ foldr doMove state' procedure'
+solve 1 input = message $ foldl doMove state' procedure'
+  where
+    input' = parseInput input
+    state' = state input'
+    procedure' = procedure input'
+
+solve 2 input = message $ foldl doMove' state' procedure'
   where
     input' = parseInput input
     state' = state input'
