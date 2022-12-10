@@ -2,6 +2,32 @@ import AOC
 
 aoc 2022, 7 do
   def p1(input) do
+    input
+    |> get_sized_dirs()
+    |> Enum.map(&elem(&1, 1))
+    |> Enum.reject(& &1 > 100_000)
+    |> Enum.sum()
+  end
+
+  def p2(input) do
+    fs_size = 70_000_000
+    required_free_space = 30_000_000
+
+    sized_dirs = get_sized_dirs(input)
+
+    total_used = sized_dirs["/"]
+
+    available_free_space = fs_size - total_used
+
+    need_to_delete_min = required_free_space - available_free_space
+
+    sized_dirs
+    |> Enum.map(&elem(&1, 1))
+    |> Enum.reject(& &1 < need_to_delete_min)
+    |> Enum.min()
+  end
+
+  defp get_sized_dirs(input) do
     {sized_dirs, _} = input
     |> String.split("\n")
     |> Enum.flat_map(&transform_input_line/1)
@@ -10,12 +36,6 @@ aoc 2022, 7 do
     |> calculate_dir_size("/")
 
     sized_dirs
-    |> Enum.map(&elem(&1, 1))
-    |> Enum.reject(& &1 > 100_000)
-    |> Enum.sum()
-  end
-
-  def p2(_input) do
   end
 
   defp transform_input_line("$ cd " <> path), do: [{:cd, path}]
