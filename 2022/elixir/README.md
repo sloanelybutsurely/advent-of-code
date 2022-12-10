@@ -1,21 +1,11 @@
-# Aoc2022
+See [../README.md](../README.md) for links to solutions by day.
 
-**TODO: Add description**
+### Setup
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `aoc_2022` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:aoc_2022, "~> 0.1.0"}
-  ]
-end
+```sh
+asdf plugin add elixir
+asdf plugin add erlang
+asdf install elixir
+asdf install elixir
+mix do deps.get, deps.compile
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/aoc_2022>.
-
