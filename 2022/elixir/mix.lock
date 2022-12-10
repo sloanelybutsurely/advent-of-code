@@ -1,0 +1,5 @@
+%{
+  "advent_of_code_utils": {:hex, :advent_of_code_utils, "3.1.1", "b1880b694035ab1ea9d722e0e1e3d4444ebc7e7993054083a3eac3c60e425f49", [:mix], [{:floki, "~> 0.34", [hex: :floki, repo: "hexpm", optional: false]}, {:tz, "~> 0.24", [hex: :tz, repo: "hexpm", optional: false]}], "hexpm", "0ab59cf0e397e97dc21e40f2a8d2c4b939ae08ec1dd046284b207d49b3335eb0"},
+  "floki": {:hex, :floki, "0.34.0", "002d0cc194b48794d74711731db004fafeb328fe676976f160685262d43706a8", [:mix], [], "hexpm", "9c3a9f43f40dde00332a589bd9d389b90c1f518aef500364d00636acc5ebc99c"},
+  "tz": {:hex, :tz, "0.24.0", "a9073f152c5a9d0abeafde57150cd61d9f11faa7fa3710a20e8487ce05c76cee", [:mix], [{:castore, "~> 0.1", [hex: :castore, repo: "hexpm", optional: true]}, {:mint, "~> 1.4", [hex: :mint, repo: "hexpm", optional: true]}], "hexpm", "5c08671bb10a56e09371106b08f5c9192449bb22e94a51de063c8c1317317027"},
+}
