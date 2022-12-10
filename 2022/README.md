@@ -8,9 +8,9 @@
 | 18  | 19  | 20  | 21  | 22  | 23  |  24  |
 | 24  |     |     |     |     |     |      |
 
-[1]: ./src/Aoc/Day1.hs
-[2]: ./src/Aoc/Day2.hs
-[3]: ./src/Aoc/Day3.hs
-[4]: ./src/Aoc/Day4.hs
-[5]: ./src/Aoc/Day5.hs
-[6]: ./src/Aoc/Day6.hs
+[1]: ./haskell/src/Aoc/Day1.hs
+[2]: ./haskell/src/Aoc/Day2.hs
+[3]: ./haskell/src/Aoc/Day3.hs
+[4]: ./haskell/src/Aoc/Day4.hs
+[5]: ./haskell/src/Aoc/Day5.hs
+[6]: ./haskell/src/Aoc/Day6.hs
