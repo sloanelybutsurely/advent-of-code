@@ -94,6 +94,22 @@ aoc 2023, 2 do
     |> Enum.sum()
   end
 
-  def p2(_input) do
+  def p2(input) do
+    input
+    |> read_games()
+    |> Stream.map(&elem(&1, 1))
+    |> Stream.map(&calculate_power/1)
+    |> Enum.sum()
+  end
+
+  defp calculate_power(dice) do
+    {reds, greens, blues} =
+      dice
+      |> Enum.reduce({0, 0, 0}, fn d, {r, g, b} ->
+        {max(Map.get(d, "red", 0), r), max(Map.get(d, "green", 0), g),
+         max(Map.get(d, "blue", 0), b)}
+      end)
+
+    reds * blues * greens
   end
 end
