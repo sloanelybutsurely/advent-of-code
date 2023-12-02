@@ -21,7 +21,8 @@ defmodule AdventOfCode.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:advent_of_code_utils, "~> 4.0.0"}
+      {:advent_of_code_utils, "~> 4.0.0"},
+      {:nimble_parsec, "~> 1.4.0"}
     ]
   end
 end
