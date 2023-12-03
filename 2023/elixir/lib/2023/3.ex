@@ -31,7 +31,18 @@ aoc 2023, 3 do
     |> Enum.sum()
   end
 
-  def p2(_input) do
+  def p2(input) do
+    grid =
+      input
+      |> String.split("\n")
+      |> Enum.map(&String.to_charlist/1)
+      |> to_grid()
+
+    for {coord, "*"} <- grid, is_gear(grid, coord), reduce: 0 do
+      sum ->
+        {_, [a, b]} = neighboring_numbers(grid, coord)
+        sum + a * b
+    end
   end
 
   def to_grid(lines) do
@@ -88,6 +99,30 @@ aoc 2023, 3 do
   def neighboring_coords({i, j}) do
     for y <- [i - 1, i, i + 1], x <- [j - 1, j, j + 1], {y, x} != {i, j}, y >= 0, x >= 0 do
       {y, x}
+    end
+  end
+
+  def neighboring_numbers(grid, coord, already_seen \\ MapSet.new()) do
+    for c <- neighboring_coords(coord), reduce: {already_seen, []} do
+      {seen, numbers} ->
+        case Map.get(grid, c) do
+          {id, n} ->
+            if MapSet.member?(seen, id) do
+              {seen, numbers}
+            else
+              {MapSet.put(seen, id), [n | numbers]}
+            end
+
+          _ ->
+            {seen, numbers}
+        end
+    end
+  end
+
+  def is_gear(grid, coord) do
+    case neighboring_numbers(grid, coord) do
+      {_, [_, _]} -> true
+      _ -> false
     end
   end
 end
