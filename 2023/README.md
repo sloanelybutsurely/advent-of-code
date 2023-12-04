@@ -9,7 +9,7 @@
 | 24  | 25  |     |     |     |     |     |
 
 
-[1]: ./elixir/lib/2023/1.ex
-[2]: ./elixir/lib/2023/2.ex
-[3]: ./elixir/lib/2023/3.ex
-[4]: ./elixir/lib/2023/4.ex
+[1]: ./lib/2023/1.ex
+[2]: ./lib/2023/2.ex
+[3]: ./lib/2023/3.ex
+[4]: ./lib/2023/4.ex
