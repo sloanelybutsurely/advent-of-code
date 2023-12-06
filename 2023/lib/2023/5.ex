@@ -1,6 +1,8 @@
 import AOC
 
 aoc 2023, 5 do
+  require Logger
+
   def p1(input) do
     {seeds, maps} = read_input(input)
 
@@ -9,7 +11,47 @@ aoc 2023, 5 do
     |> Enum.min()
   end
 
-  def p2(_input) do
+  def p2(input) do
+    {unparsed_seed_ranges, maps} = read_input(input)
+
+    seed_ranges =
+      unparsed_seed_ranges
+      |> Enum.chunk_every(2)
+      |> Enum.map(fn [start, len] ->
+        start..(start + len)
+      end)
+
+    ranges = simplify_ranges(seed_ranges)
+
+    ranges
+    |> Stream.concat()
+    |> Stream.chunk_every(1_000_000)
+    |> Task.async_stream(
+      fn chunk ->
+        Logger.info("Calculating min for chunk starting at #{inspect(List.first(chunk))}")
+
+        minimum =
+          for i <- chunk, reduce: nil do
+            nil ->
+              traverse_maps(maps, i)
+
+            n ->
+              maps
+              |> traverse_maps(i)
+              |> min(n)
+          end
+
+        Logger.info(
+          "Found minimum for chunk starting at #{inspect(List.first(chunk))}: #{minimum}"
+        )
+
+        minimum
+      end,
+      ordered: false,
+      timeout: :infinity
+    )
+    |> Stream.map(&elem(&1, 1))
+    |> Enum.min()
   end
 
   def traverse_maps(maps, start) do
@@ -22,6 +64,27 @@ aoc 2023, 5 do
       nil -> start
     end
   end
+
+  def simplify_ranges([]), do: []
+
+  def simplify_ranges([x | xs]) do
+    case Enum.find(xs, &(not Range.disjoint?(x, &1))) do
+      nil ->
+        [x | simplify_ranges(xs)]
+
+      overlapped_with ->
+        without_overlapped = Enum.reject(xs, &(&1 == overlapped_with))
+
+        o_start..o_end = overlapped_with
+        x_start..x_end = x
+
+        merged = min(o_start, x_start)..max(o_end, x_end)
+
+        simplify_ranges([merged | without_overlapped])
+    end
+  end
+
+  # input parsing
 
   def read_input(input) do
     ["seeds: " <> seeds_str, _ | map_strs] = String.split(input, "\n")
