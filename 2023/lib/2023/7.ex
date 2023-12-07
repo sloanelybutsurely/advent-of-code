@@ -21,7 +21,7 @@ aoc 2023, 7 do
 
       [counts, hand, bet]
     end)
-    |> Enum.sort(&compare_hands_1/2)
+    |> Enum.sort(&compare_hands/2)
     |> Enum.map(&Enum.at(&1, 2))
     |> Enum.with_index(1)
     |> Enum.map(fn {bet, rank} -> bet * rank end)
@@ -56,7 +56,7 @@ aoc 2023, 7 do
 
       [counts, hand, bet]
     end)
-    |> Enum.sort(&compare_hands_1/2)
+    |> Enum.sort(&compare_hands/2)
     |> Enum.map(&Enum.at(&1, 2))
     |> Enum.with_index(1)
     |> Enum.map(fn {bet, rank} -> bet * rank end)
@@ -79,6 +79,7 @@ aoc 2023, 7 do
     |> Enum.map(card_to_number)
   end
 
-  def compare_hands_1([counts, hand_a, _], [counts, hand_b, _]), do: hand_a <= hand_b
-  def compare_hands_1([counts_a, _, _], [counts_b, _, _]), do: counts_a <= counts_b
+  def compare_hands([counts_a, hand_a, _], [counts_b, hand_b, _]) do
+    [counts_a, hand_a] <= [counts_b, hand_b]
+  end
 end
