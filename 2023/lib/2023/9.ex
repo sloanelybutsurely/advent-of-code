@@ -9,7 +9,11 @@ aoc 2023, 9 do
     |> Enum.sum()
   end
 
-  def p2(_input) do
+  def p2(input) do
+    input
+    |> lines_of_integers()
+    |> Enum.map(&prev_in_sequence/1)
+    |> Enum.sum()
   end
 
   def next_in_sequence(xs) do
@@ -17,6 +21,14 @@ aoc 2023, 9 do
     |> differentiate()
     |> Enum.map(&List.last/1)
     |> Enum.sum()
+  end
+
+  def prev_in_sequence(xs) do
+    xs
+    |> differentiate()
+    |> Enum.map(&List.first/1)
+    |> Enum.reverse()
+    |> Enum.reduce(&(&1 - &2))
   end
 
   def differentiate(xs) do
