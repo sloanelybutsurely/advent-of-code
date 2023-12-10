@@ -2,7 +2,6 @@
 
 import Control.Monad (ap)
 
-parseInput :: String -> [[Integer]]
 parseInput = map (map read . words) . lines
 
 solve str = show (part1', part2')
@@ -23,7 +22,6 @@ next = sum . map last . differentiate
 
 prev = foldl1 subtract . reverse . map head . differentiate
 
-main :: IO ()
 main = do
   contents <- getContents
   putStrLn $ solve contents
