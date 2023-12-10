@@ -1,5 +1,7 @@
 #!/usr/bin/env runhaskell
 
+import Control.Monad (ap)
+
 parseInput :: String -> [[Integer]]
 parseInput = map (map read . words) . lines
 
@@ -9,17 +11,17 @@ solve str = show (part1', part2')
     part1' = part1 input
     part2' = part2 input
 
-part1 xs = sum $ map next xs
-part2 xs = sum $ map prev xs
+part1 = sum . map next
+part2 = sum . map prev
 
-deltas xs = zipWith (flip (-)) xs $ tail xs
-differentiate xs = takeWhile notAllZeros $ iterate deltas xs
+deltas = ap (zipWith subtract) tail
+differentiate = takeWhile notAllZeros . iterate deltas
   where
-    notAllZeros xs = not $ all (== 0) xs
+    notAllZeros = not . all (0 ==)
 
-next xs = sum $ map last $ differentiate xs
+next = sum . map last . differentiate
 
-prev xs = foldl1 (flip (-)) $ reverse $ map head $ differentiate xs
+prev = foldl1 subtract . reverse . map head . differentiate
 
 main :: IO ()
 main = do
