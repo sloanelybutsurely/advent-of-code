@@ -18,25 +18,27 @@ aoc 2015, 19 do
     {replacement_mappings, starting_molecule}
   end
 
-  def splits(xs) do
-    for i <- 1..(length(xs) - 1) do
-      Enum.split(xs, i)
-    end
+  def possible_substitutions("", _, _), do: []
+
+  def possible_substitutions(str, source, replacement) do
+    <<curr::binary-size(1), next::binary>> = str
+
+    this =
+      if String.starts_with?(str, source),
+        do: [String.replace(str, source, replacement, global: false)],
+        else: []
+
+    this ++ for r <- possible_substitutions(next, source, replacement), do: curr <> r
   end
 
-  def possible_replacements(mappings, str) do
-    for {source, replacements} <- mappings,
-        replacement <- replacements,
-        {l, r} <- splits(String.split(str, source)),
-        uniq: true do
-      Enum.join(
-        [
-          Enum.join(l, source),
-          Enum.join(r, source)
-        ],
-        replacement
-      )
+  def possible_replacements(mappings, molecule) do
+    for {source, replacements} <- mappings, replacement <- replacements do
+      {source, replacement}
     end
+    |> Enum.flat_map(fn {source, replacement} ->
+      possible_substitutions(molecule, source, replacement)
+    end)
+    |> Enum.uniq()
   end
 
   def p1 do
