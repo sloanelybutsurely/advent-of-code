@@ -27,6 +27,32 @@ defmodule AOCHelpers do
     |> Enum.map(&integers/1)
   end
 
+  def to_grid(str) do
+    lists =
+      str
+      |> lines()
+      |> Enum.map(&letters/1)
+
+    map =
+      for {list, y} <- Enum.with_index(lists), {v, x} <- Enum.with_index(list), into: %{} do
+        {{x, y}, v}
+      end
+
+    max_x =
+      map
+      |> Enum.map(fn {{x, _}, _} -> x end)
+      |> Enum.max()
+
+    max_y =
+      map
+      |> Enum.map(fn {{_, y}, _} -> y end)
+      |> Enum.max()
+
+    bounds = {0..max_x, 0..max_y}
+
+    {map, bounds}
+  end
+
   @doc """
   Take a list of terms and a list of 1-arity functions and apply each function
   to the coresponding term in the list of terms.
@@ -44,4 +70,11 @@ defmodule AOCHelpers do
   def id(x), do: x
   def always(x), do: fn -> x end
   def is?(x), do: &(&1 == x)
+
+  def combinations(_, 0), do: [[]]
+  def combinations([], _), do: []
+
+  def combinations([x | xs], n) do
+    for(tail <- combinations(xs, n - 1), do: [x | tail]) ++ combinations(xs, n)
+  end
 end
