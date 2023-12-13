@@ -7,9 +7,11 @@ defmodule AOCHelpers do
     String.split(str)
   end
 
-  def letters(str) when is_binary(str) do
+  def chars(str) when is_binary(str) do
     String.split(str, "", trim: true)
   end
+
+  def letters(str), do: chars(str)
 
   def integers(str) when is_binary(str) do
     str
@@ -25,6 +27,12 @@ defmodule AOCHelpers do
     input
     |> lines()
     |> Enum.map(&integers/1)
+  end
+
+  def lines_of_chars(input) do
+    input
+    |> lines()
+    |> Enum.map(&chars/1)
   end
 
   def to_grid(str) do
@@ -76,5 +84,11 @@ defmodule AOCHelpers do
 
   def combinations([x | xs], n) do
     for(tail <- combinations(xs, n - 1), do: [x | tail]) ++ combinations(xs, n)
+  end
+
+  def transpose(list_of_lists) do
+    list_of_lists
+    |> Enum.zip()
+    |> Enum.map(&Tuple.to_list/1)
   end
 end
