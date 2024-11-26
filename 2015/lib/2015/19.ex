@@ -49,5 +49,29 @@ aoc 2015, 19 do
   end
 
   def p2 do
+    {mappings, molecule} = input()
+
+    find_shortest_path(molecule, invert(mappings))
+  end
+
+  defp find_shortest_path(molecule, replacements, steps \\ 0)
+  defp find_shortest_path("e", _replacements, steps), do: steps
+
+  defp find_shortest_path(molecule, replacements, steps) do
+    {from, to} =
+      Enum.find(replacements, fn {from, _} ->
+        String.contains?(molecule, from)
+      end)
+
+    molecule = String.replace(molecule, from, to, global: false)
+
+    find_shortest_path(molecule, replacements, steps + 1)
+  end
+
+  defp invert(mappings) do
+    for {from, tos} <- mappings, to <- tos do
+      {to, from}
+    end
+    |> Enum.sort_by(fn {from, _} -> String.length(from) end, :desc)
   end
 end
