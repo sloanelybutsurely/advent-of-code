@@ -26,3 +26,5 @@ advent_of_code_2015-*.tar
 /tmp/
 
 /input/
+
+.envrc
