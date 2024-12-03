@@ -22,6 +22,7 @@ defmodule Aoc2024.MixProject do
   defp deps do
     [
       {:advent_of_code_utils, "~> 4.0"},
+      {:nimble_parsec, "~> 1.4"},
       {:styler, "~> 1.2", only: [:dev, :test], runtime: false}
     ]
   end
