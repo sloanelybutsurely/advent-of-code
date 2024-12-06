@@ -21,7 +21,12 @@ aoc 2024, 6 do
 
     in_front_of_guard = forward(state).pos
 
-    for pos <- Map.keys(state.grid), pos != in_front_of_guard, not blocked?(state, pos), reduce: 0 do
+    # by first simulating the regular board i can limit my search to just
+    # positions that are reachable. this cuts the runtime of pt 2 from about
+    # 47s to about 10s
+    %State{visited: visited} = simulate(state)
+
+    for pos <- visited, pos != in_front_of_guard, not blocked?(state, pos), reduce: 0 do
       sum ->
         if (state
             |> insert_obstacle(pos)
