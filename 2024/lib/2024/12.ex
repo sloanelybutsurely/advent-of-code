@@ -64,11 +64,6 @@ aoc 2024, 12 do
     end)
   end
 
-  def n({x, y}), do: {x, y + 1}
-  def s({x, y}), do: {x, y - 1}
-  def e({x, y}), do: {x + 1, y}
-  def w({x, y}), do: {x - 1, y}
-
   defp count_sides(plot) do
     # find exterior faces
     exterior_faces =

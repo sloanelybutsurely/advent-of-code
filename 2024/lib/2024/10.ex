@@ -64,13 +64,6 @@ aoc 2024, 10 do
     end
   end
 
-  ## shared
-
-  defp n({x, y}), do: {x, y + 1}
-  defp s({x, y}), do: {x, y - 1}
-  defp e({x, y}), do: {x + 1, y}
-  defp w({x, y}), do: {x - 1, y}
-
   ## input
 
   def read_map(input) do
